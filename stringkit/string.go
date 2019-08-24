@@ -13,7 +13,7 @@ import (
 	"golang.org/x/text/transform"
 )
 
-// RemoveAllSpace -
+// RemoveAllSpace remove unicode spaces
 func RemoveAllSpace(v string) string {
 	return strings.Map(func(r rune) rune {
 		if unicode.IsSpace(r) {
@@ -28,6 +28,7 @@ func GBKToUTF8(r io.Reader) io.Reader {
 	return transform.NewReader(r, simplifiedchinese.GBK.NewDecoder())
 }
 
+// DetermineEncodingFromReader -
 // https://siongui.github.io/2018/10/27/auto-detect-and-convert-html-encoding-to-utf8-in-go/
 func DetermineEncodingFromReader(r io.Reader) (e encoding.Encoding, name string, certain bool, err error) {
 	b, err := bufio.NewReader(r).Peek(1024)
@@ -39,6 +40,7 @@ func DetermineEncodingFromReader(r io.Reader) (e encoding.Encoding, name string,
 	return
 }
 
+// StringNamedFormat format by named argument
 func StringNamedFormat(s string, m map[string]string) string {
 	for k, v := range m {
 		s = strings.Replace(s, fmt.Sprintf("{%s}", k), v, -1)
@@ -46,6 +48,7 @@ func StringNamedFormat(s string, m map[string]string) string {
 	return s
 }
 
+// TruncateUTF8String -
 // 按utf8字符数裁剪字符串
 // https://stackoverflow.com/questions/46415894/golang-truncate-strings-with-special-characters-without-corrupting-data/46416000
 func TruncateUTF8String(s string, limit int) string {

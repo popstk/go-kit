@@ -10,21 +10,26 @@ import (
 	"github.com/go-redis/redis"
 )
 
+// RedisLock Redis distributed lock
 type RedisLock struct {
 	c     *redis.Client
 	key   string
 	value string
-	ch chan struct{}
+	ch    chan struct{}
 }
 
+// NewRedisLock new a redis lock
+// key - lock name
 func NewRedisLock(c *redis.Client, key string) *RedisLock {
 	return &RedisLock{
 		c:   c,
 		key: key,
-		ch: make(chan struct{}),
+		ch:  make(chan struct{}),
 	}
 }
 
+// Lock try lock
+// notice: renew every 15 sec
 func (l *RedisLock) Lock() error {
 	var guid [16]byte
 	_, err := io.ReadFull(rand.Reader, guid[:16])
@@ -59,6 +64,7 @@ func (l *RedisLock) Lock() error {
 	return nil
 }
 
+// Unlock unlock check value
 func (l *RedisLock) Unlock() error {
 	value, err := l.c.Get(l.key).Result()
 	if err != nil {

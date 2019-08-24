@@ -9,7 +9,7 @@ func init() {
 	cronGlobal.Start()
 }
 
-// NewCron -
+// NewCron cron wrapper, return a channel
 func NewCron(spec string) (chan struct{}, error) {
 	ch := make(chan struct{})
 	err := cronGlobal.AddFunc(spec, func() {
@@ -20,4 +20,3 @@ func NewCron(spec string) (chan struct{}, error) {
 	}
 	return ch, nil
 }
-

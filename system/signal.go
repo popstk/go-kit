@@ -7,8 +7,7 @@ import (
 	"syscall"
 )
 
-
-// OnCloseSignal -
+// OnCloseSignal call f on receiving close signal
 func OnCloseSignal(f func()) {
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, syscall.SIGINT, syscall.SIGKILL, syscall.SIGTERM)
@@ -24,4 +23,3 @@ func CancelOnExitContext() context.Context {
 	OnCloseSignal(cancel)
 	return ctx
 }
-
